@@ -1,0 +1,19 @@
+{
+  "name": "local-ovm-ui",
+  "version": "1.0.0",
+  "description": "who's this for?  clem etc.",
+  "main": "setup.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bent": "^7.3.12",
+    "chalk": "^4.1.1",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.4.1",
+    "execa": "^5.1.1"
+  }
+}
