@@ -1,4 +1,4 @@
-require('dotenv')
+require('dotenv').config()
 
 const { resolve, dirname } = require("path")
 const { gray, green, cyan, red, bgRed, yellow } = require('chalk');
@@ -115,7 +115,9 @@ async function run() {
     await graphStatus({ endpoint: 'http://localhost:5001' })
 }
 
-run().catch(err => console.error(err.toString()))
+run().catch(err => {
+    throw err
+})
 
 // Chain
 // =====
