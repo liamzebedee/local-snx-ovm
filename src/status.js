@@ -14,7 +14,7 @@ const {
     STAKING_PATH,
     SNX_NETWORK,
 
-    // GRAPH_NODE_URL,
+    GRAPH_NODE_URL,
     // L1_CHAIN_URL,
     // L2_CHAIN_URL
 } = process.env
@@ -86,8 +86,10 @@ const bent = require('bent')
 async function graphStatus({ endpoint }) {
     let isOnline
     try {
-        const response = await bent('GET', 'json')(endpoint);
-        
+        // TODO: improve this test of whether graph is online.
+        // Ideally, it should perform a graphql query.
+        const response = await bent('OPTIONS', 'string')(endpoint);
+        isOnline = true
     } catch(err) {
         if (!(err.code == 'ECONNREFUSED')) throw err
     }
@@ -112,7 +114,7 @@ async function run() {
     // logItem('Managed', !L2_CHAIN_URL)
 
     logSection('Graph node')
-    await graphStatus({ endpoint: 'http://localhost:5001' })
+    await graphStatus({ endpoint: GRAPH_NODE_URL })
 }
 
 run().catch(err => {
