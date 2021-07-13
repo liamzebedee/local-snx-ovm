@@ -76,6 +76,7 @@ SNX_NETWORK=optimism-local npm run deploy optimism-local general
 
 ```sh
 # js-monorepo
+git checkout local-ovm/base
 npm i
 
 # @synthetixio/contracts-interface
@@ -91,11 +92,13 @@ npm run build
 
 ```sh
 # Kwenta
+git checkout local-ovm/base
 npm i
 npm link ../js-monorepo/packages/contracts-interface
 npm run dev
 
 # Staking
+git checkout local-ovm
 npm i
 npm link ../js-monorepo/packages/contracts-interface
 ```
