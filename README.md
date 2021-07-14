@@ -27,7 +27,7 @@ npm link
 git checkout local-l2
 
 ## Runs the Optimism nodes.
-npx hardhat ops
+npx hardhat ops --start --detached
 
 ## Deploy contracts.
 npx harhdat test:integration:l2 --compile --deploy
