@@ -18,6 +18,10 @@ Components to a local setup:
 ### Synthetix.
 
 ```sh
+# // Deterministic account #0 when using `npx hardhat node`
+#    owner: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+export LOCAL_OVM_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
 # Protocol
 npm link
 git checkout local-l2
