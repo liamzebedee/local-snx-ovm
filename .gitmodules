@@ -1,0 +1,5 @@
+[submodule "js-monorepo"]
+	path = projects/js-monorepo
+	url = git@github.com:Synthetixio/js-monorepo
+    branch = local-ovm/base
+
