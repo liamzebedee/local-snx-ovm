@@ -26,3 +26,9 @@
 [submodule "projects/synthetix"]
 	path = projects/synthetix
 	url = https://github.com/Synthetixio/synthetix
+[submodule "projects/optimistic-oracle"]
+	path = projects/optimistic-oracle
+	url = https://github.com/Synthetixio/optimistic-oracle
+[submodule "projects/futures-keepers"]
+	path = projects/futures-keepers
+	url = https://github.com/Synthetixio/futures-keepers
