@@ -1,4 +1,4 @@
-# snx-local-ovm
+# synthetix-local-protocol-setup
 
 ## Overview
 
@@ -12,110 +12,69 @@ Components to a local setup:
  * Synthetix Subgraph.
  * JS Monorepo.
  * Dapps: Kwenta, Staking.
+ * Price oracle.
+ * Futures keepers.
+
+Each of these projects are setup into the `projects/` subfolder using Git submodules. 
+
+NOTE: I had to make a lot of modifications to all of the above. There are still unmerged PR's, tracked in the [epic here](https://github.com/Synthetixio/issues/issues/209).
 
 ## Install.
 
-### Synthetix.
-
 ```sh
-# // Deterministic account #0 when using `npx hardhat node`
-#    owner: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
-export LOCAL_OVM_PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+# Clone all above projects.
+git submodule update --recursive
 
 # Protocol
-npm link
-git checkout local-l2
+./start-optimism-ops.sh
+./deploy-protocol.sh
 
-## Runs the Optimism nodes.
-npx hardhat ops --start --detached
+# Graph
+./start-graph.sh
+./deploy-subgraph.sh
 
-## Deploy contracts.
-npx harhdat test:integration:l2 --compile --deploy
+# JS/Dapps
+./link-dapps.sh
+```
+
+Now you can run the dapps:
+
+```sh
+# Kwenta
+cd projects/kwenta
+npm run dev
+
+# Staking
+cd projects/staking
+npm run dev
 ```
 
 ### Graph node.
 
-#### Build.
+#### Build on M1.
 
-```sh
-# Graph node.
-git clone https://github.com/graphprotocol/graph-node
-cd graph-node/
-cd docker/
-docker-compose up -d
-```
-
-For M1 macs, the docker image does not work, so you must go through some manual steps:
-
-```
-# IPFS
-ipfs daemon
-
-# Install and run Postgres.
-
-# Run graph-node.
-./target/debug/graph-node \
-  --postgres-url postgresql://postgres:@localhost:5432/graph-node \
-  --ethereum-rpc optimism-local:http://localhost:8545 \
-  --ipfs 127.0.0.1:5001
-```
+For M1 macs, the docker image does not work, so you must go through some manual steps. These will be detailed more later, DM me for details.
 
 #### Synthetix subgraph.
 
-```sh
-# Subgraph.
-git clone https://github.com/Synthetixio/synthetix-subgraph
-cd synthetix-subgraph/
-git checkout local-ovm-2
-npm i
-npm link ../synthetix
-
-npx graph create --node http://localhost:8020/ synthetixio-team/optimism-local-general
-
-SNX_NETWORK=optimism-local npm run build optimism-local general
-SNX_NETWORK=optimism-local npm run deploy optimism-local general
-```
-
-### js-monorepo
+Currently only the `general` subgraph is built and deployed.
 
 ```sh
-# js-monorepo
-git checkout local-ovm/base
-npm i
-
-# @synthetixio/contracts-interface
-cd packages/contracts-interface
-npm link ../../../synthetix
-
-cd ../..
-# build repo
-npm run build
+./scripts/deploy-subgraph.sh
 ```
 
 ### Dapps.
 
-```sh
-# Kwenta
-git checkout local-ovm/base
-npm i
-npm link ../js-monorepo/packages/contracts-interface
-npm run dev
-
-# Staking
-git checkout local-ovm
-npm i
-npm link ../js-monorepo/packages/contracts-interface
-```
+Kwenta and Staking are contained within the `projects/` subfolders respectively. They have been linked to the local `synthetix` package and the `js-monorepo` packages, such that they can access local artifacts.
 
 ## DevEx tooling.
 
- 1. Configure the `.env`.
-    ```
-    cp .env.example .env
-    # Configure the local paths to the above subprojects.
-    ```
- 2. Run `npm install`.
- 3. Run `node src/status.js`. It will output something like: 
+### Status check.
+
+The status script returns useful info of the status of various projects.
+
+ 1. Run `npm install` in this repo.
+ 2. Run `node src/status.js`. It will output something like: 
 
     ```sh
     (base) ➜  local-ovm-ui node src/status.js
@@ -137,3 +96,14 @@ npm link ../js-monorepo/packages/contracts-interface
     * Endpoint: http://localhost:5001
     * Online: ❌
    ```
+
+
+## Troubleshooting.
+
+### JSON-RPC Errors.
+
+Commonly while deploying to the L2 ops node, I encountered JSON RPC errors. I don't know why, though restarting the local L2 node fixes it -
+
+```sh
+./scripts/restart-l2.sh
+```
