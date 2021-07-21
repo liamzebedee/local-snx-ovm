@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a WIP to integrate the UI and smart contract engineering into one cohesive flow.
+This is a WIP to integrate the UI and smart contract engineering into one cohesive flow. L2-only for now, though quite easy to get running for L2 if you're curious.
 
 Components to a local setup:
 
@@ -32,6 +32,9 @@ git submodule update --recursive
 # Graph
 ./scripts/start-graph.sh
 ./scripts/deploy-subgraph.sh
+
+# Oracle.
+./scripts/start-oracle.sh
 
 # JS/Dapps
 ./scripts/link-dapps.sh
