@@ -97,7 +97,21 @@ The status script returns useful info of the status of various projects.
    ```
 
 
-## Troubleshooting.
+## Troubleshooting and tips.
+
+### Local OVM accounts.
+
+The OVM geth node has no notion of locally unlocked accounts. All transactions must be signed by a private key. The local OVM ops node uses the same Hardhat HD wallet mnemonic for accounts. These are the first two:
+
+```sh
+# Account #0: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+# Key:     0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+# Account #1: 0xB64fF7a4a33Acdf48d97dab0D764afD0F6176882
+# Key:     0x8722B4BE1CFBBFF1BF7DC8430650A98256640DB8200F9690269D974E96CC52C3
+```
+
+The local account is minted some SNX during deployment using the `get-snx-local-l2` hardhat task.
 
 ### JSON-RPC Errors.
 
