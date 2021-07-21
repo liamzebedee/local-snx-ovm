@@ -1,4 +1,28 @@
 [submodule "projects/js-monorepo"]
 	path = projects/js-monorepo
-	url = https://github.com/synthetixio/js-monorepo
+	url = https://github.com/Synthetixio/js-monorepo
 	branch = local-ovm/base
+
+[submodule "projects/kwenta"]
+	path = projects/kwenta
+	url = https://github.com/synthetixio/kwenta
+	branch = local-ovm/base
+
+[submodule "projects/graph-node"]
+	path = projects/graph-node
+	url = https://github.com/graphprotocol/graph-node
+	branch = master
+
+[submodule "projects/staking"]
+	path = projects/staking
+	url = https://github.com/Synthetixio/staking
+	branch = local-ovm
+
+[submodule "projects/synthetix-subgraph"]
+	path = projects/synthetix-subgraph
+	url = https://github.com/Synthetixio/synthetix-subgraph
+	branch = local-ovm-2
+
+[submodule "projects/synthetix"]
+	path = projects/synthetix
+	url = https://github.com/Synthetixio/synthetix
