@@ -76,24 +76,24 @@ The status script returns useful info of the status of various projects.
  2. Run `node src/status.js`. It will output something like: 
 
    ```sh
-    (base) ➜  local-ovm-ui node src/status.js
-    synthetix (/Users/liamz/Documents/Work/2021_Synthetix/code/synthetix)
+    (base) ➜  synthetix-local-protocol-setup git:(master) ✗ node src/status.js
+    synthetix (network: local, /Users/.../synthetix-local-protocol-setup/projects/synthetix)
+
+    === Optimism node: ===
+      * Endpoint: http://localhost:8545
+      * Online: ✅
+      * Chain ID: 420
+      * Last deployment: 21/07/2021, 4:31:41 pm
 
     === L1 node: ===
-    * Endpoint: http://localhost:9545
-    * Online: ✅
-    * Chain ID: 31337
-    * Last deployment: Never
-
-    === L2 node: ===
-    * Endpoint: http://localhost:8545
-    * Online: ✅
-    * Chain ID: 420
-    * Last deployment: Never
+      * Endpoint: http://localhost:9545
+      * Online: ✅
+      * Chain ID: 31337
+      * Last deployment: Never
 
     === Graph node: ===
-    * Endpoint: http://localhost:5001
-    * Online: ❌
+      * Endpoint: http://localhost:8020/
+      * Online: ❌
    ```
 
 

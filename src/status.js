@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const { resolve, dirname } = require("path")
+const fs = require('fs')
 const { gray, green, cyan, red, bgRed, yellow } = require('chalk');
 const { formatEther, formatBytes32String, toUtf8String } = require('ethers').utils;
 const ethers = require('ethers')
@@ -38,6 +39,8 @@ const logItem = (itemName, itemValue, indent = 1, color = undefined) => {
     }
 };
 
+const fileExists = async path => !!(await fs.promises.stat(path).catch(e => false));
+
 async function chainStatus({ endpoint, snxNetwork, useOvm }) {
     let provider
     let isOnline = false
@@ -54,23 +57,32 @@ async function chainStatus({ endpoint, snxNetwork, useOvm }) {
     }
 
     if (isOnline) {
-        const deployment = require(resolve(`${SYNTHETIX_PATH}/publish/deployed/${snxNetwork}${useOvm ? '-ovm' : ''}/deployment.json`))
-        if (Object.keys(deployment.targets).length) {
-            let mostRecentlyDeployedTarget = Object.values(deployment.targets).reduce((prev, target) => {
-                let timestamp = target.timestamp
-                if(!timestamp) return prev
+        // This supports networks with dumb names like kovan-futures-ovm. 
+        // I wonder who named that one... (it was me).
+        const networkTarget = snxNetwork + ((useOvm && !snxNetwork.includes('ovm')) ? '-ovm' : '')
+        const deploymentPath = resolve(`${SYNTHETIX_PATH}/publish/deployed/${networkTarget}/deployment.json`)
 
-                if ((new Date(timestamp)) > (new Date(prev.timestamp))) {
-                    return target   
+        if (await fileExists(deploymentPath)) {
+            const deployment = require(deploymentPath)
+
+            if (Object.keys(deployment.targets).length) {
+                let mostRecentlyDeployedTarget = Object.values(deployment.targets).reduce((prev, target) => {
+                    let timestamp = target.timestamp
+                    if (!timestamp) return prev
+
+                    if ((new Date(timestamp)) > (new Date(prev.timestamp))) {
+                        return target
+                    }
+
+                    return prev
+                })
+
+                // Now check the contract still exists, as the chain may have been restarted, and state lost.
+                const code = await provider.getCode(mostRecentlyDeployedTarget.address)
+
+                if (code !== '0x') {
+                    lastDeployment = new Date(mostRecentlyDeployedTarget.timestamp)
                 }
-                
-                return prev
-            })
-            
-            // Now check the contract still exists, as the chain may have been restarted, and state lost.
-            const code = await provider.getCode(mostRecentlyDeployedTarget.address)
-            if (code !== '0x') {
-                lastDeployment = new Date(mostRecentlyDeployedTarget.timestamp)
             }
         }
     }
@@ -98,20 +110,14 @@ async function graphStatus({ endpoint }) {
     logItem('Online', isOnline ? '✅' : '❌')
 }
 
-function checkSynthetixLinked(path) {
-    
-}
-
 async function run() {
-    console.log(`synthetix (${gray(resolve(SYNTHETIX_PATH))})`)
+    console.log(`synthetix (network: ${SNX_NETWORK}, ${gray(resolve(SYNTHETIX_PATH))})`)
+
+    logSection('Optimism node')
+    await chainStatus({ endpoint: 'http://localhost:8545', snxNetwork: SNX_NETWORK, useOvm: true })
 
     logSection('L1 node')
     await chainStatus({ endpoint: 'http://localhost:9545', snxNetwork: SNX_NETWORK, useOvm: false })
-    // logItem('Managed', !L1_CHAIN_URL)
-
-    logSection('L2 node')
-    await chainStatus({ endpoint: 'http://localhost:8545', snxNetwork: SNX_NETWORK, useOvm: true })
-    // logItem('Managed', !L2_CHAIN_URL)
 
     logSection('Graph node')
     await graphStatus({ endpoint: GRAPH_NODE_URL })
@@ -120,27 +126,3 @@ async function run() {
 run().catch(err => {
     throw err
 })
-
-// Chain
-// =====
-
-// L1 Node
-//     ENDPOINT Online
-//     Chain ID
-//     Last deployment XXX
-
-// L2 Node
-//     ENDPOINT Online
-//     Chain ID
-//     Last deployment XXX
-
-// Graph node
-//     ENDPOINT Online
-//     Last deployment
-
-// Staking
-    // Using local synthetix via `npm link`? N.
-
-// Kwenta
-    // Using local synthetix via `npm link`? N.
-
