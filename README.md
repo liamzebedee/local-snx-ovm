@@ -76,7 +76,7 @@ The status script returns useful info of the status of various projects.
  1. Run `npm install` in this repo.
  2. Run `node src/status.js`. It will output something like: 
 
-    ```sh
+   ```sh
     (base) ➜  local-ovm-ui node src/status.js
     synthetix (/Users/liamz/Documents/Work/2021_Synthetix/code/synthetix)
 
