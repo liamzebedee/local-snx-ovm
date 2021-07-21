@@ -70,7 +70,7 @@ async function chainStatus({ endpoint, snxNetwork, useOvm }) {
             // Now check the contract still exists, as the chain may have been restarted, and state lost.
             const code = await provider.getCode(mostRecentlyDeployedTarget.address)
             if (code !== '0x') {
-                lastDeployment = mostRecentlyDeployedTarget.timestamp
+                lastDeployment = new Date(mostRecentlyDeployedTarget.timestamp)
             }
         }
     }
@@ -78,7 +78,7 @@ async function chainStatus({ endpoint, snxNetwork, useOvm }) {
     logItem('Endpoint', endpoint)
     logItem('Online', isOnline ? '✅' : '❌')
     logItem('Chain ID', chainId)
-    logItem('Last deployment', lastDeployment || yellow('Never'))
+    logItem('Last deployment', (lastDeployment && lastDeployment.toLocaleString()) || yellow('Never'))
 }
 
 const bent = require('bent')
