@@ -26,15 +26,15 @@ NOTE: I had to make a lot of modifications to all of the above. There are still 
 git submodule update --recursive
 
 # Protocol
-./start-optimism-ops.sh
-./deploy-protocol.sh
+./scripts/start-optimism-ops.sh
+./scripts/deploy-protocol.sh
 
 # Graph
-./start-graph.sh
-./deploy-subgraph.sh
+./scripts/start-graph.sh
+./scripts/deploy-subgraph.sh
 
 # JS/Dapps
-./link-dapps.sh
+./scripts/link-dapps.sh
 ```
 
 Now you can run the dapps:
@@ -58,10 +58,6 @@ For M1 macs, the docker image does not work, so you must go through some manual 
 #### Synthetix subgraph.
 
 Currently only the `general` subgraph is built and deployed.
-
-```sh
-./scripts/deploy-subgraph.sh
-```
 
 ### Dapps.
 
