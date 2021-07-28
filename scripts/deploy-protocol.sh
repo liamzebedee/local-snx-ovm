@@ -17,6 +17,3 @@ node publish deploy \
     --private-key $HARDHAT_ACCOUNT_1_PRIVKEY \
     --fresh-deploy \
     --yes --ignore-safety-checks
-
-# Fund local account with SNX.
-node_modules/.bin/hardhat get-snx-local-l2 --account 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
