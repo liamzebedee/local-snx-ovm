@@ -23,18 +23,27 @@ NOTE: I had to make a lot of modifications to all of the above. There are still 
 
 ```sh
 # Clone all above projects.
-git submodule update --recursive
+git submodule init
+git submodule update
+# Install deps.
+npm i
 
 # Protocol
 ./scripts/start-optimism-ops.sh
 ./scripts/deploy-protocol.sh
+./scripts/start-oracle.sh
+
+# Fund accounts with SNX and sUSD.
+# This depends on fresh exchange rates, which means the oracle must be started beforehand.
+./scripts/fund-test-accounts.sh
 
 # Graph
 ./scripts/start-graph.sh
 ./scripts/deploy-subgraph.sh
 
 # Oracle.
-./scripts/start-oracle.sh
+./scripts/start-futures-keepers.sh
+./scripts/start-futures-trader-bot.sh
 
 # JS/Dapps
 ./scripts/link-dapps.sh
