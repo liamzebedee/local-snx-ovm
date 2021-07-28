@@ -65,8 +65,7 @@ class Trader {
     async yolotrade() {
         const x = Math.random()
         const margin = parseEther('200') // 200 sUSD
-        const leverage = parseEther('10').mul(parseEther("" + x)).div(parseEther('1'))
-        // const leverage = parseEther("1.0")
+        const leverage = parseEther('2').mul(parseEther("" + x)).div(parseEther('1'))
         
         console.log(`Submitting order margin=${formatEther(margin)} leverage=${formatEther(leverage)}`)
         
@@ -87,7 +86,7 @@ class Trader {
                     }
                 }
 
-                throw err
+                console.error(err)
             } 
             
         })
