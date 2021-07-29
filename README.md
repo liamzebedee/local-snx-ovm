@@ -92,13 +92,15 @@ The status script returns useful info of the status of various projects.
       * Endpoint: http://localhost:8545
       * Online: ✅
       * Chain ID: 420
-      * Last deployment: 21/07/2021, 4:31:41 pm
+      * Last deployment: 29/07/2021, 3:17:49 pm
+      * Latest block: 29/07/2021, 4:40:11 pm
 
     === L1 node: ===
       * Endpoint: http://localhost:9545
       * Online: ✅
       * Chain ID: 31337
       * Last deployment: Never
+      * Latest block: 29/07/2021, 4:40:22 pm
 
     === Graph node: ===
       * Endpoint: http://localhost:8020/
@@ -121,6 +123,18 @@ The OVM geth node has no notion of locally unlocked accounts. All transactions m
 ```
 
 The local account is minted some SNX during deployment using the `get-snx-local-l2` hardhat task.
+
+### Oracle timestamp errors
+
+The L2 OVM chain uses the timestamp of the last submitted batch of transcations to L1. Unfortunately, in a local Optimism environment, we don't have regular transactions coming through on the L2 chain, which would trigger synchronisation with L1 via the sequencer submitting rollups. So, we have a script which will simulate transactional activity on L2 - aka a heartbeat.
+
+```js
+(base) ➜  synthetix-local-protocol-setup git:(master) ✗ node src/chain-heartbeat.js
+Running heartbeat for chain at http://localhost:8545
+.
+```
+
+Running this should fix the error of `Time is too far into the future`. 
 
 ### JSON-RPC Errors.
 

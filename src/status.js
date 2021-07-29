@@ -41,17 +41,24 @@ const logItem = (itemName, itemValue, indent = 1, color = undefined) => {
 
 const fileExists = async path => !!(await fs.promises.stat(path).catch(e => false));
 
+function printTimestamp() {
+
+}
+
 async function chainStatus({ endpoint, snxNetwork, useOvm }) {
     let provider
     let isOnline = false
     let chainId = '?'
     let lastDeployment
+    let latestBlockTimestamp
 
     try {
         provider = new ethers.providers.JsonRpcProvider(endpoint)
         const network = await provider.getNetwork()
         chainId = network.chainId
         isOnline = true
+        const latestBlock = await provider.getBlock('latest')
+        latestBlockTimestamp = (new Date(latestBlock.timestamp * 1000)).toLocaleString()
     } catch(err) {
         if (!(err.code == 'NETWORK_ERROR')) throw err
     }
@@ -81,16 +88,19 @@ async function chainStatus({ endpoint, snxNetwork, useOvm }) {
                 const code = await provider.getCode(mostRecentlyDeployedTarget.address)
 
                 if (code !== '0x') {
-                    lastDeployment = new Date(mostRecentlyDeployedTarget.timestamp)
+                    lastDeployment = (new Date(mostRecentlyDeployedTarget.timestamp)).toLocaleString()
                 }
             }
         }
+    } else {
+        lastDeployment = 'n/a, node is offline.'
     }
 
     logItem('Endpoint', endpoint)
     logItem('Online', isOnline ? '✅' : '❌')
     logItem('Chain ID', chainId)
-    logItem('Last deployment', (lastDeployment && lastDeployment.toLocaleString()) || yellow('Never'))
+    logItem('Last deployment', lastDeployment || yellow('Never'))
+    logItem('Latest block', latestBlockTimestamp || yellow('Never'))
 }
 
 const bent = require('bent')
