@@ -12,7 +12,7 @@ npm i
 cd packages/contracts-interface
 npm link ../../../synthetix
 
-# npm run build
+npm run build
 popd
 
 # 
