@@ -28,25 +28,28 @@ git submodule update
 # Install deps.
 npm i
 
+# Start Docker
+docker info
+
 # Protocol
-./scripts/start-optimism-ops.sh
-./scripts/deploy-protocol.sh
-./scripts/start-oracle.sh
+./scripts/start-optimism-ops.sh       # background
+./scripts/deploy-protocol.sh          # once off
+./scripts/start-oracle.sh             # background
 
 # Fund accounts with SNX and sUSD.
 # This depends on fresh exchange rates, which means the oracle must be started beforehand.
-./scripts/fund-test-accounts.sh
+./scripts/fund-test-accounts.sh       # once off
 
 # Graph
-./scripts/start-graph.sh
-./scripts/deploy-subgraph.sh
+./scripts/start-graph.sh              # background
+./scripts/deploy-subgraph.sh          # once off
 
-# Oracle.
-./scripts/start-futures-keepers.sh
-./scripts/start-futures-trader-bot.sh
+# Optional: Futures.
+./scripts/start-futures-keepers.sh    # background
+./scripts/start-futures-trader-bot.sh # background
 
 # JS/Dapps
-./scripts/link-dapps.sh
+./scripts/link-dapps.sh               # once off
 ```
 
 Now you can run the dapps:
@@ -107,6 +110,14 @@ The status script returns useful info of the status of various projects.
       * Online: ❌
    ```
 
+### Funding your Metamask account.
+
+You can use the `fund-local-accounts` hardhat task to get local L2 SNX, sUSD and ETH.
+
+```sh
+cd projects/synthetix
+YOUR_METAMASK_ACCOUNT=0x0000000000000000000000000000000000000001 node_modules/.bin/hardhat fund-local-accounts --provider-url http://localhost:8545 --target-network local --account $YOUR_METAMASK_ACCOUNT
+```
 
 ## Troubleshooting and tips.
 
@@ -122,7 +133,7 @@ The OVM geth node has no notion of locally unlocked accounts. All transactions m
 # Key:     0x8722B4BE1CFBBFF1BF7DC8430650A98256640DB8200F9690269D974E96CC52C3
 ```
 
-The local account is minted some SNX during deployment using the `get-snx-local-l2` hardhat task.
+The local account is minted some SNX during deployment using the `fund-local-accounts` hardhat task.
 
 ### Oracle timestamp errors
 
